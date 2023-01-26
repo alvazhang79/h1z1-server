@@ -145,6 +145,8 @@ export enum ItemClasses {
   WEAPONS_MELEES = 4098,
   WEAPONS_MELEES0 = 25037,
   WEAPONS_GENERIC = 25054,
+  WEAPONS_CROSSBOW = 25047,
+  WEAPONS_BOW = 25038,
 }
 
 export enum VehicleIds {
@@ -180,6 +182,7 @@ export enum LoadoutSlots {
   FISTS = 7,
   HEAD = 11,
   ARMOR = 38,
+  RADIO = 39,
   ITEM2 = 41,
 }
 
@@ -510,6 +513,7 @@ export enum Items {
   LOCKER_KEY_F2 = 2646,
   LOCKER_KEY_F3 = 2647,
   LOCKER_KEY_F4 = 2648,
+  EMERGENCY_RADIO = 2273,
 
   HEADLIGHTS_OFFROADER = 9,
   HEADLIGHTS_PICKUP = 1728,
