@@ -744,7 +744,7 @@ export class ZoneServer2016 extends EventEmitter {
       }
     );
     this.sendData(client, "SendSelfToClient", {
-      data: client.character.pGetSendSelf(this, client.guid),
+      data: client.character.pGetSendSelf(this, client.guid, client),
     });
     client.character.initialized = true;
     this.initializeContainerList(client);
@@ -2131,7 +2131,7 @@ export class ZoneServer2016 extends EventEmitter {
     if (item.currentDurability <= 0) {
       this.removeInventoryItem(client, item);
       if (this.isWeapon(item.itemDefinitionId)) {
-        client.character.lootContainerItem(this, this.generateItem(1354));
+        client.character.lootContainerItem(this, this.generateItem(Items.BROKEN_METAL_ITEM));
       }
       return;
     }
@@ -3056,7 +3056,7 @@ export class ZoneServer2016 extends EventEmitter {
       const c = this._clients[a];
       if (
         isPosInRadius(
-          this._charactersRenderDistance,
+          character.npcRenderDistance || this._charactersRenderDistance,
           character.state.position,
           c.character.state.position
         ) &&
@@ -3427,20 +3427,11 @@ export class ZoneServer2016 extends EventEmitter {
   }
 
   sendChatToAllWithRadio(client: Client, message: string) {
-    this.sendData(client, "Chat.ChatText", {
-      message: `[RADIO: ${client.character.name}]: ${message}`,
-      unknownDword1: 0,
-      color: [255, 255, 255, 0],
-      unknownDword2: 13951728,
-      unknownByte3: 0,
-      unknownByte4: 1,
-    });
     for (const a in this._clients) {
       const c = this._clients[a];
-      if (c != client) {
-        if (!c.character._loadout["39"]) return;
+        if (!c.character._loadout[LoadoutSlots.RADIO]) return;
         if (
-          c.character._loadout["39"].itemDefinitionId !=
+          c.character._loadout[LoadoutSlots.RADIO].itemDefinitionId !=
             Items.EMERGENCY_RADIO ||
           !c.radio
         )
@@ -3453,7 +3444,6 @@ export class ZoneServer2016 extends EventEmitter {
           unknownByte3: 0,
           unknownByte4: 1,
         });
-      }
     }
   }
 
@@ -6096,8 +6086,8 @@ export class ZoneServer2016 extends EventEmitter {
     let eatCount = 0;
     let staminaCount = 0;
     let givetrash = 0;
-    let healCount = 9;
-    let bandagingCount = 40;
+    let healCount = 0;
+    let bandagingCount = 0;
     let timeout = 0;
     for (const a in UseOptions) {
       if (
